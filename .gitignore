@@ -30,3 +30,4 @@ build/tmp/
 build/classes/
 build/generated/
 build/resources/
+/.gradle/buildOutputCleanup
