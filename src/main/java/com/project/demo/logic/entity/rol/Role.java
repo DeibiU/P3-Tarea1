@@ -9,10 +9,10 @@ import java.util.Date;
 @Table(name = "rol")
 @Entity
 public class Role {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true, nullable = false)
     @Enumerated(EnumType.STRING)
@@ -29,11 +29,11 @@ public class Role {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
