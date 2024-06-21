@@ -26,7 +26,7 @@ public class Product {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
-    @OneToOne(cascade = CascadeType.REMOVE) //Wacho Chitouuu   @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
 
@@ -60,15 +60,15 @@ public class Product {
         return price;
     }
 
-    public void setPrize(Float price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
-    public Integer getStockSize() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStockSize(Integer stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
