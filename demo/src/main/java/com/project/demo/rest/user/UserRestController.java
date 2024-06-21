@@ -1,5 +1,8 @@
 package com.project.demo.rest.user;
 
+import com.project.demo.logic.entity.rol.Role;
+import com.project.demo.logic.entity.rol.RoleEnum;
+import com.project.demo.logic.entity.rol.RoleRepository;
 import com.project.demo.logic.entity.user.User;
 import com.project.demo.logic.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -18,17 +22,32 @@ public class UserRestController {
     private UserRepository UserRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'SUPER_ADMIN')")
     public List<User> getAllUsers() {
         return UserRepository.findAll();
     }
 
     @PostMapping
-    public User addUser(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public User createAdministrator(@RequestBody User newAdminUser) {
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
+
+        if (optionalRole.isEmpty()) {
+            return null;
+        }
+
+        var user = new User();
+        user.setName(newAdminUser.getName());
+        user.setEmail(newAdminUser.getEmail());
+        user.setPassword(passwordEncoder.encode(newAdminUser.getPassword()));
+        user.setRole(optionalRole.get());
+
         return UserRepository.save(user);
     }
 
